@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:meals/models/meal.dart';
 import 'package:meals/screen/category_screen.dart';
 import 'package:meals/screen/meals_screen.dart';
+import 'package:meals/widgets/main_drawer.dart';
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});
@@ -20,37 +21,46 @@ class _TabScreenState extends State<TabsScreen> {
       _selectPageIndex = index;
     });
   }
- // d,cs.vn
+
+  // d,cs.vn
   void _showInfoMessage(String message) {
-  
     ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      duration: Duration(seconds: 3),
-      content: Text(message),),);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 3),
+        content: Text(message),
+      ),
+    );
   }
 
   void _toggleFavouriteMealStatus(Meal meal) {
-  final isExisted = _favouriteMeals.contains(meal);
-  setState(() {
-    if (isExisted) {
-      _favouriteMeals.remove(meal);
-      _showInfoMessage("Meal is no longer Favourite");
-    } else {
-      _favouriteMeals.add(meal);
-      _showInfoMessage('Meal is favourite');
-    }
-  });
-}
-
+    final isExisted = _favouriteMeals.contains(meal);
+    setState(() {
+      if (isExisted) {
+        _favouriteMeals.remove(meal);
+        _showInfoMessage("Meal is no longer Favourite");
+      } else {
+        _favouriteMeals.add(meal);
+        _showInfoMessage('Meal is favourite');
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final activePage =
-        _selectPageIndex == 0 ? CategoryScreen(onToggleFavourite: _toggleFavouriteMealStatus,) : MealsScreen(meals: _favouriteMeals,onToggleFavourite: _toggleFavouriteMealStatus,);
+    final activePage = _selectPageIndex == 0
+        ? CategoryScreen(
+            onToggleFavourite: _toggleFavouriteMealStatus,
+          )
+        : MealsScreen(
+            meals: _favouriteMeals,
+            onToggleFavourite: _toggleFavouriteMealStatus,
+          );
     var activePageTitle =
         _selectPageIndex == 0 ? 'Categories' : 'Your favourite';
     return Scaffold(
       appBar: AppBar(title: Text(activePageTitle)),
+      drawer: MainDrawer(),
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectPageIndex,
