@@ -26,10 +26,7 @@ class _TabScreenState extends State<TabsScreen> {
   void _showInfoMessage(String message) {
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: Duration(seconds: 3),
-        content: Text(message),
-      ),
+      SnackBar(duration: Duration(seconds: 3), content: Text(message)),
     );
   }
 
@@ -46,21 +43,27 @@ class _TabScreenState extends State<TabsScreen> {
     });
   }
 
+  void _setScreen(String identifier) {
+    if (identifier == 'filters') {
+    } else {
+      Navigator.of(context).pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final activePage = _selectPageIndex == 0
-        ? CategoryScreen(
-            onToggleFavourite: _toggleFavouriteMealStatus,
-          )
-        : MealsScreen(
-            meals: _favouriteMeals,
-            onToggleFavourite: _toggleFavouriteMealStatus,
-          );
+    final activePage =
+        _selectPageIndex == 0
+            ? CategoryScreen(onToggleFavourite: _toggleFavouriteMealStatus)
+            : MealsScreen(
+              meals: _favouriteMeals,
+              onToggleFavourite: _toggleFavouriteMealStatus,
+            );
     var activePageTitle =
         _selectPageIndex == 0 ? 'Categories' : 'Your favourite';
     return Scaffold(
       appBar: AppBar(title: Text(activePageTitle)),
-      drawer: MainDrawer(),
+      drawer: MainDrawer(onSelectScreen: _setScreen),
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectPageIndex,
